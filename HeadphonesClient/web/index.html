@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Headphones Guru</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+            body,
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                font-family: "Raleway"
+            }
+            img{
+                width: 100%
+            }
+        </style>
+        <script>
+            var product_container;
+            var xmlHttp;
+            var savedHtml = "";
+
+            function getXmlHttpObject() {
+                var xmlHttp = null;
+                try { //firefox, opera 8+, safari
+                    xmlHttp = new XMLHttpRequest();
+                } catch (e) {// IE
+                    try {
+                        xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+                    } catch (e) {
+                        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+
+                    }
+                }
+                return xmlHttp;
+            }
+
+            function traversalDOMTree() {
+                var product_list_ele = document.getElementById('data_container');
+                product_list_ele.innerHTML = "";
+                update();
+            }
+
+            function update() {
+                var genreId = document.getElementById("optionGenre").value;
+                var typeId = document.getElementById("optionType").value;
+                xmlHttp = getXmlHttpObject();
+                if (xmlHttp == null) {
+                    alert("Your browser doesn't seem to be supporting this website. Please use other browsers, thank you!");
+                    return;
+                }
+
+                var url = "MainController?action=recommend&genreId=" + genreId + "&typeId=" + typeId;
+                xmlHttp.onreadystatechange = handleStateChange;
+                xmlHttp.open("POST", url, true);
+                xmlHttp.send(null);
+
+            }
+
+            function handleStateChange() {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                    var tmp = xmlHttp.responseText;
+                    var parser = new DOMParser();
+                    var xmlDOM = parser.parseFromString(tmp, "application/xml");
+                    searchNode(xmlDOM);
+                }
+            }
+
+            function searchNode(node) {
+                var product_list_ele = document.getElementById('data_container');
+                if (node == null) {
+                    return;
+                }
+
+                if (node.tagName == "categoryId") {
+                    var id_node = node.nextSibling.nextSibling;
+                    var image_node = id_node.nextSibling;
+                    var name_node = image_node.nextSibling;
+                    var price_node = name_node.nextSibling;
+                    var signature_node = price_node.nextSibling;
+                    product_container = renderProductContainer(id_node.firstChild.nodeValue
+                            , name_node.firstChild.nodeValue
+                            , image_node.firstChild.nodeValue, price_node.firstChild.nodeValue,
+                            signature_node.firstChild.nodeValue);
+                    // alert(product_container)
+                    product_list_ele.appendChild(product_container);
+                }
+                var childs = node.childNodes;
+                for (var i = 0; i < childs.length; i++) {
+                    searchNode(childs[i]);
+                }
+            }
+
+            function renderProductContainer(id, name, img, price, signature) {
+                var prod_container = document.createElement("div");
+                prod_container.classList.add("w3-third");
+                prod_container.classList.add("w3-container");
+                prod_container.classList.add("w3-margin-bottom");
+                prod_container.classList.add("box");
+
+                var prod_img = document.createElement("img")
+                prod_img.classList.add("w3-hover-opacity");
+//                prod_img.style.maxWidth = '100%';
+                prod_img.style.height = '100%';
+                prod_img.style.width = '100%';
+                prod_img.src = img
+
+                prod_container.appendChild(prod_img);
+
+                var info_container = document.createElement("div");
+                info_container.classList.add("w3-container");
+                info_container.classList.add("w3-white");
+
+                var prod_name = document.createElement("h3");
+                prod_name.style.fontWeight = 'bold';
+                prod_name.style.maxWidth = '100%';
+                prod_name.style.whiteSpace = 'nowrap';
+                prod_name.style.overflow = 'hidden';
+                prod_name.style.textOverflow = 'ellipsis';
+                prod_name.innerText = name;
+
+                var prod_price = document.createElement("p");
+                prod_price.innerText = "Price: " + price;
+
+                var prod_signature = document.createElement("p");
+                prod_signature.innerText = "Signature: " + signature;
+
+                info_container.appendChild(prod_name);
+                info_container.appendChild(prod_price);
+                info_container.appendChild(prod_signature);
+
+                prod_container.appendChild(info_container);
+
+                var detailsLink = document.createElement("a");
+                detailsLink.href = "MainController?action=details&productId=" + id;
+
+                detailsLink.appendChild(prod_container);
+
+                return  detailsLink;
+            }
+
+        </script>
+    </head>
+
+    <body class="w3-light-grey w3-content" style="max-width:1600px">
+        <div class="w3-main">
+            
+            <div class="w3-container sub-content">
+                <h1><b>Headphones Guru</b></h1>
+                <div class="w3-section w3-bottombar w3-padding-16">
+                    <form name="genreForm">
+                        What music genre do you listen to?
+                        <select name="genreOption" id="optionGenre">
+                            <option value="1" selected="selected">Rock</option>
+                            <option value="2">Pop</option>
+                            <option value="3">K-Pop</option>
+                            <option value="4">Classical</option>
+                            <option value="5">Jazz</option>
+                            <option value="6">Hip-hop/Rap</option>
+                            <option value="7">Instrumental</option>
+                            <option value="8">Vocals</option>
+                            <option value="9">EDM</option>
+                            <option value="10">R&B</option>
+                        </select>
+                        <br/>
+                        Do you prefer headphones or in-ears?
+                        <select name="productTpyeOption" id="optionType">
+                            <option value="0">All</option>
+                            <option value="1">Headphones</option>
+                            <option value="2">IEM and Earphones</option>
+                        </select>
+                        <br/>
+                        <input class="search_btn" type="button" value="Get recommendations" onclick="traversalDOMTree()"/>
+                    </form>
+                </div>
+            </div>
+
+            <div class="w3-row-padding" id="data_container">
+
+            </div>
+
+            <div class="w3-black w3-center w3-padding-24">Powered by <a href="https://www.w3schools.com/w3css/default.asp"
+                                                                        title="W3.CSS" target="_blank" class="w3-hover-opacity">w3.css</a></div>
+        </div>
+    </body>
+</html>
