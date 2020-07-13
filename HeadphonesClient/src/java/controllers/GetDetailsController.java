@@ -8,7 +8,6 @@ package controllers;
 import clients.ProductsClient;
 import dtos.ProductDetailsDto;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +32,9 @@ public class GetDetailsController extends HttpServlet {
         try {
             String productId = request.getParameter("productId");
             ProductsClient client = new ProductsClient();
-            ProductDetailsDto result = client.getProductsDetails(ProductDetailsDto.class, productId);
-            System.out.println(result.getName());
+//            ProductDetailsDto result = client.getProductsDetails(ProductDetailsDto.class, productId);
+            String result = client.getProductsDetails(String.class, productId);
+//            System.out.println(result.getName());
             request.setAttribute("INFO", result);
             url = SUCCESS;
         } catch (Exception ex) {

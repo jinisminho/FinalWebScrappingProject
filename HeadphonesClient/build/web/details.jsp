@@ -4,6 +4,7 @@
     Author     : Hoang Pham
 --%>
 
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -27,6 +28,7 @@
         </style>
     </head>
     <body class="w3-light-grey w3-content" style="max-width:1600px">
+        <x:parse var="doc" doc="${requestScope.INFO}"/>
         <!-- !PAGE CONTENT! -->
         <div class="w3-main">
             <div class="w3-container sub-content">
@@ -37,19 +39,19 @@
             <!-- Images of Me -->
             <div class="w3-row-padding w3-padding-16" id="about">
                 <div>
-                    <img src="${requestScope.INFO.imgUrl}" alt="product's image" style="width:50%; display: block; margin-left: auto; margin-right: auto;">
+                    <img src="<x:out select="$doc/productDetailsDto/imgUrl"/>" alt="product's image" style="width:50%; display: block; margin-left: auto; margin-right: auto;">
                 </div>
             </div>
 
             <div class="w3-container w3-padding-large" style="margin-bottom:32px">
                 <h3><b>Product details</b></h3>
-                <h4><b>${requestScope.INFO.name}</b></h4>
-                <p>Price: $${requestScope.INFO.price}</p>
-                <p>Description: ${requestScope.INFO.description}</p>
+                <h4><b><x:out select="$doc/productDetailsDto/name"/></b></h4>
+                <p>Price: $<x:out select="$doc/productDetailsDto/price"/></p>
+                <p>Description: <x:out select="$doc/productDetailsDto/description"/></p>
                 <hr/>
                 <h4>Sound signature</h4>
-                <p>Signature: ${requestScope.INFO.signature}</p>
-                <p>Recommend genres: ${requestScope.INFO.genreList}</p>
+                <p>Signature: <x:out select="$doc/productDetailsDto/signature"/></p>
+                <p>Recommend genres: <x:out select="$doc/productDetailsDto/genreList"/></p>
             </div>
 
             <!-- Footer -->

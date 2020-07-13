@@ -6,7 +6,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 import jndi.entities.Categories;
 import jndi.entities.ProductTypes;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-07-11T13:55:00")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-07-13T21:58:24")
 @StaticMetamodel(Products.class)
 public class Products_ { 
 

@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import jndi.entities.GenreCategory;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-07-11T13:55:00")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2020-07-13T21:58:24")
 @StaticMetamodel(MusicGenres.class)
 public class MusicGenres_ { 
 
